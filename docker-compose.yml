@@ -8,3 +8,8 @@ services:
             - .:/app
         ports:
             - "8002:8000"
+        environment:
+            - USE_S3=TRUE
+            - AWS_ACCESS_KEY_ID=AKIAQ3EGSHFKZLIO3SGE
+            - AWS_SECRET_ACCESS_KEY=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
+            - AWS_STORAGE_BUCKET_NAME=django-media-cumn
