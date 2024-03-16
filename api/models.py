@@ -6,7 +6,7 @@ def generate_image_dirname(self, filename):
     url = 'fotosPerfil/{}/{}'.format(self.id,filename)
     return url
 def generate_shield_dirname(self, filename):
-    url = 'escudos/{}/{}'.format(self.nombre,filename)
+    url = 'escudos/{}/{}'.format(self.id,filename)
     return url
 
 class User(AbstractUser):
@@ -17,6 +17,7 @@ class User(AbstractUser):
     fotoPerfil = models.ImageField(upload_to= generate_image_dirname, null=True, blank=True, default='fotosPerfil/default.jpg')
     descripcion = models.TextField(max_length=3000, null=True, blank=True)
     contrasenia = models.CharField(max_length=255)
+    equipoFavorito = models.ForeignKey('Equipo', on_delete=models.SET_NULL, null=True, blank=True)
     username = None
 
     USERNAME_FIELD = 'correo'
@@ -26,5 +27,5 @@ class Equipo(models.Model):
     id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     idBd = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
-    modelImage = models.ImageField(upload_to= generate_shield_dirname, null=True, blank=True, default='fotosPerfil/default.jpg')
+    fotoEscudo = models.ImageField(upload_to= generate_shield_dirname, null=True, blank=True)
 # Create your models here.

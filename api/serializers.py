@@ -4,7 +4,7 @@ from .models import User, Equipo
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'idBd','nombre', 'correo', 'contrasenia', 'fotoPerfil', 'descripcion']
+        fields = ['id', 'idBd','nombre', 'correo', 'contrasenia', 'fotoPerfil', 'descripcion', 'equipoFavorito' ]
         extra_kwargs = {'contrasenia': {'write_only': True}}
     
     def create(self, validated_data):
@@ -18,4 +18,4 @@ class UserSerializer(serializers.ModelSerializer):
 class EquipoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipo
-        fields = ['id', 'idBd','nombre', 'modelImage']
+        fields = ['id', 'idBd','nombre', 'fotoEscudo']
