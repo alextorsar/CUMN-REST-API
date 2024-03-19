@@ -7,7 +7,7 @@ import jwt
 
 class EquipoView(APIView):
 
-    #Este método es para crear un nuevo equipo, está comentado porque es necesario crear más equipos
+    #Este método es para crear un nuevo equipo, está comentado porque NO es necesario crear más equipos
     """def post(self, request):
         serializer = EquipoSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
