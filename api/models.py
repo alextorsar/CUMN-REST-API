@@ -28,4 +28,17 @@ class Equipo(models.Model):
     idBd = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
     fotoEscudo = models.ImageField(upload_to= generate_shield_dirname, null=True, blank=True)
-# Create your models here.
+
+class Partido(models.Model):
+    id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    idBd = models.AutoField(primary_key=True)
+    estadio = models.CharField(max_length=255)
+    status = models.IntegerField()
+    jornada = models.IntegerField()
+    fecha = models.DateTimeField(null=True, blank=True)
+    equipoLocal = models.ForeignKey('Equipo', on_delete=models.CASCADE, null=False, blank=False, related_name='equipoLocal')
+    equipoVisitante = models.ForeignKey('Equipo', on_delete=models.CASCADE, null=False, blank=False, related_name='equipoVisitante')
+    golesLocal = models.IntegerField()
+    golesVisitante = models.IntegerField()
+
+
