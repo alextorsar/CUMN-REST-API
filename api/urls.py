@@ -4,6 +4,7 @@ from .equiposViews import EquipoView, EquipoIdView, EquipoNombreView, PostEquipo
 from .partidosViews import PartidoView, PartidoIdView, PartidosEquipoView, PartidosJornadaView
 from .valoracionesViews import ValoracionView
 from .visualizacionesViews import VisualizacionView
+from .reseniasViews import ResenaView
 
 urlpatterns = [
     path('register/', RegisterView.as_view()),
@@ -21,4 +22,5 @@ urlpatterns = [
     path('partido/jornada/<int:jornada>/', PartidosJornadaView.as_view()),
     path('valoracion/', ValoracionView.as_view()),
     path('visualizacion/', VisualizacionView.as_view()),
+    path('resenia/', ResenaView.as_view())
 ]

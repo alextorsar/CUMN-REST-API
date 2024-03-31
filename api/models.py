@@ -57,3 +57,12 @@ class Visualizacion(models.Model):
     partido = models.ForeignKey('Partido', on_delete=models.CASCADE, null=False, blank=False)
     hora = models.DateTimeField(auto_now_add=True)
     REQUIRED_FIELDS = ['usuario', 'partido']
+
+class Resena(models.Model):
+    id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    idBd = models.AutoField(primary_key=True)
+    usuario = models.ForeignKey('User', on_delete=models.CASCADE, null=False, blank=False)
+    partido = models.ForeignKey('Partido', on_delete=models.CASCADE, null=False, blank=False)
+    comentario = models.TextField()
+    hora = models.DateTimeField(auto_now_add=True)
+    REQUIRED_FIELDS = ['usuario', 'comentario', 'partido']

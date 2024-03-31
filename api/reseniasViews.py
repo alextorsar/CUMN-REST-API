@@ -1,11 +1,11 @@
 from rest_framework.views import APIView
-from .serializers import VisualizacionSerializer
-from .models import Visualizacion
+from .serializers import ResenaSerializer
+from .models import Resena
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 import jwt
 
-class VisualizacionView(APIView):
+class ResenaView(APIView):
     def post(self, request):
         token = request.COOKIES.get('jwt')
         if not token:
@@ -16,7 +16,7 @@ class VisualizacionView(APIView):
             raise AuthenticationFailed('Sesion expirada')
         data = request.data.copy()
         data['usuario'] = payload['idBd']
-        serializer = VisualizacionSerializer(data=data)
+        serializer = ResenaSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -29,6 +29,6 @@ class VisualizacionView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        visualizaciones = Visualizacion.objects.filter(usuario=payload['idBd']).all()
-        serializer = VisualizacionSerializer(visualizaciones, many=True)
+        resenias = Resena.objects.filter(usuario=payload['idBd']).all()
+        serializer = ResenaSerializer(resenias, many=True)
         return Response(serializer.data)
