@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
-from .serializers import EquipoSerializer, UserSerializer, PartidoSerializer
-from .models import Equipo, User, Partido
+from .serializers import PartidoSerializer
+from .models import Partido
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 import jwt

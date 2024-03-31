@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Equipo, Partido
+from .models import User, Equipo, Partido, Valoracion
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,3 +24,7 @@ class PartidoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partido
         fields = ['id', 'idBd','estadio', 'status', 'jornada', 'fecha', 'equipoLocal', 'equipoVisitante', 'golesLocal', 'golesVisitante']
+class ValoracionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Valoracion
+        fields = ['id', 'idBd','usuario', 'partido', 'valoracion', 'hora']
