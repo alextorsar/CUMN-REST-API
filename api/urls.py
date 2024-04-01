@@ -5,6 +5,7 @@ from .partidosViews import PartidoView, PartidoIdView, PartidosEquipoView, Parti
 from .valoracionesViews import ValoracionView, ValoracionPartidoView
 from .visualizacionesViews import VisualizacionView, VisualizacionPartidoView
 from .reseniasViews import ResenaView, ResenaPartidoView
+from .seguidosViews import SeguidosView
 
 urlpatterns = [
     path('register/', RegisterView.as_view()),
@@ -29,5 +30,6 @@ urlpatterns = [
     path('resenia/', ResenaView.as_view()),
     path('resenia/<int:resena_id>/', ResenaView.as_view()),
     path('resenia/partido/<int:partido_id>/', ResenaPartidoView.as_view()),
-
+    path('seguido/', SeguidosView.as_view()),
+    path('seguido/<int:seguido_id>/', SeguidosView.as_view()),
 ]

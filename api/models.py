@@ -66,3 +66,11 @@ class Resena(models.Model):
     comentario = models.TextField()
     hora = models.DateTimeField(auto_now_add=True)
     REQUIRED_FIELDS = ['usuario', 'comentario', 'partido']
+
+class Seguido(models.Model):
+    id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    idBd = models.AutoField(primary_key=True)
+    seguidor = models.ForeignKey('User', on_delete=models.CASCADE, null=False, blank=False, related_name='seguidor')
+    seguido = models.ForeignKey('User', on_delete=models.CASCADE, null=False, blank=False, related_name='seguido')
+    hora = models.DateTimeField(auto_now_add=True)
+    REQUIRED_FIELDS = ['seguidor', 'seguido']
