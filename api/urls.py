@@ -22,8 +22,12 @@ urlpatterns = [
     path('partido/jornada/<int:jornada>/', PartidosJornadaView.as_view()),
     path('valoracion/', ValoracionView.as_view()),
     path('valoracion/partido/<int:partido_id>/', ValoracionPartidoView.as_view()),
+    path('valoracion/<int:valoracion_id>/', ValoracionView.as_view()),
     path('visualizacion/', VisualizacionView.as_view()),
+    path('visualizacion/<int:visualizacion_id>/', VisualizacionView.as_view()),
     path('visualizacion/partido/<int:partido_id>/', VisualizacionPartidoView.as_view()),
     path('resenia/', ResenaView.as_view()),
+    path('resenia/<int:resena_id>/', ResenaView.as_view()),
     path('resenia/partido/<int:partido_id>/', ResenaPartidoView.as_view()),
+
 ]

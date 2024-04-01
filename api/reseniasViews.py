@@ -32,6 +32,21 @@ class ResenaView(APIView):
         resenias = Resena.objects.filter(usuario=payload['idBd']).all()
         serializer = ResenaSerializer(resenias, many=True)
         return Response(serializer.data)
+    
+    def delete(self, request, resena_id):
+        token = request.COOKIES.get('jwt')
+        if not token:
+            raise AuthenticationFailed('No autenticado')
+        try:
+            payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Sesion expirada')
+        resenia = Resena.objects.filter(idBd=resena_id).first()
+        if resenia != None and resenia.usuario.idBd == payload['idBd']:
+            resenia.delete()
+            return Response({'message': 'Reseña eliminada correctamente'})
+        else:
+            return Response({'message': 'No se pudo elimar la reseña'}, status=400) 
 
 class ResenaPartidoView(APIView):
     def get(self, request, partido_id):
