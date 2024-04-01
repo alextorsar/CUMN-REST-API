@@ -32,3 +32,16 @@ class VisualizacionView(APIView):
         visualizaciones = Visualizacion.objects.filter(usuario=payload['idBd']).all()
         serializer = VisualizacionSerializer(visualizaciones, many=True)
         return Response(serializer.data)
+
+class VisualizacionPartidoView(APIView):
+    def get(self, request, partido_id):
+        token = request.COOKIES.get('jwt')
+        if not token:
+            raise AuthenticationFailed('No autenticado')
+        try:
+            payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Sesion expirada')
+        visualizaciones = Visualizacion.objects.filter(partido=partido_id).all()
+        serializer = VisualizacionSerializer(visualizaciones, many=True)
+        return Response(serializer.data)
