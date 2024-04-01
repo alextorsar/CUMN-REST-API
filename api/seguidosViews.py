@@ -45,3 +45,15 @@ class SeguidosView(APIView):
             return Response({'mensaje': 'Se ha dejado de seguir correctamente'}, status=204)
         else:
             return Response({'mensaje': 'No se ha podido dejar de seguir'}, status=401)
+class SeguidoresView(APIView):
+    def get(self, request):
+        token = request.COOKIES.get('jwt')
+        if not token:
+            raise AuthenticationFailed('No autenticado')
+        try:
+            payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Sesion expirada')
+        seguidores = Seguido.objects.filter(seguido=payload['idBd'])
+        serializer = SeguidoSerializer(seguidores, many=True)
+        return Response(serializer.data)
