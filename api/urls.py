@@ -6,6 +6,7 @@ from .valoracionesViews import ValoracionView, ValoracionPartidoView
 from .visualizacionesViews import VisualizacionView, VisualizacionPartidoView
 from .reseniasViews import ResenaView, ResenaPartidoView
 from .seguidosViews import SeguidosView, SeguidoresView
+from .socialViews import UltimasAccionesSociales
 
 urlpatterns = [
     path('register/', RegisterView.as_view()),
@@ -33,4 +34,5 @@ urlpatterns = [
     path('seguido/', SeguidosView.as_view()),
     path('seguido/<int:seguido_id>/', SeguidosView.as_view()),
     path('seguidor/', SeguidoresView.as_view()),
+    path('social/', UltimasAccionesSociales.as_view())
 ]

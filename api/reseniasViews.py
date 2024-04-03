@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from .serializers import ResenaSerializer
 from .models import Resena
+from .socialController import getResenas
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 import jwt
@@ -29,9 +30,8 @@ class ResenaView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        resenias = Resena.objects.filter(usuario=payload['idBd']).all()
-        serializer = ResenaSerializer(resenias, many=True)
-        return Response(serializer.data)
+        resenas = getResenas(payload['idBd'])
+        return Response(resenas)
     
     def delete(self, request, resena_id):
         token = request.COOKIES.get('jwt')

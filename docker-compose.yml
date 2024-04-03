@@ -3,8 +3,10 @@ version: '3'
 services:
   web:
         build: .
-        command: python manage.py runserver 0.0.0.0:8000
+        command: python manage.py runserver --settings=CUMN.settings 0.0.0.0:8000
         volumes:
             - .:/app
         ports:
             - "8002:8000"
+        environment:
+            - DJANGO_SETTINGS_MODULE=CUMN.settings

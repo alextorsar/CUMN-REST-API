@@ -3,6 +3,7 @@ from .serializers import ValoracionSerializer
 from .models import Valoracion
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
+from .socialController import getValoraciones
 import jwt
 
 class ValoracionView(APIView):
@@ -29,9 +30,8 @@ class ValoracionView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        valoraciones = Valoracion.objects.filter(usuario=payload['idBd']).all()
-        serializer = ValoracionSerializer(valoraciones, many=True)
-        return Response(serializer.data)
+        valoraciones = getValoraciones(payload['idBd'])
+        return Response(valoraciones)
     
     def delete(self, request, valoracion_id):
         token = request.COOKIES.get('jwt')

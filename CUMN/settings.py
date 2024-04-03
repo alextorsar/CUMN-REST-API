@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 
+DJANGO_SETTINGS_MODULE = 'CUMN.settings'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,6 +29,14 @@ SECRET_KEY = 'django-insecure-_52nqk^63c+@t0hc)3sa#g5!5rhtrs#mprzutnwpio#=7c)7e)
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+TIME_ZONE =	'Europe/Madrid'
+
+USE_I18N = True
+
+USE_L10N = False
+
+USE_TZ = False
 
 
 # Application definition

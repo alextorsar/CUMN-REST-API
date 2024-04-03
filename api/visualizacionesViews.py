@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from .serializers import VisualizacionSerializer
 from .models import Visualizacion
+from .socialController import getVisualizaciones
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 import jwt
@@ -29,9 +30,8 @@ class VisualizacionView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        visualizaciones = Visualizacion.objects.filter(usuario=payload['idBd']).all()
-        serializer = VisualizacionSerializer(visualizaciones, many=True)
-        return Response(serializer.data)
+        visualizaciones = getVisualizaciones(payload['idBd'])
+        return Response(visualizaciones)
     
     def delete(self, request, visualizacion_id):
         token = request.COOKIES.get('jwt')
