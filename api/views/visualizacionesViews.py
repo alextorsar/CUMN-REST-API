@@ -1,12 +1,12 @@
 from rest_framework.views import APIView
-from .serializers import ValoracionSerializer
-from .models import Valoracion
+from ..serializers import VisualizacionSerializer
+from ..models import Visualizacion
+from ..controllers.socialController import getVisualizaciones
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-from .socialController import getValoraciones
 import jwt
 
-class ValoracionView(APIView):
+class VisualizacionView(APIView):
     def post(self, request):
         token = request.COOKIES.get('jwt')
         if not token:
@@ -17,7 +17,7 @@ class ValoracionView(APIView):
             raise AuthenticationFailed('Sesion expirada')
         data = request.data.copy()
         data['usuario'] = payload['idBd']
-        serializer = ValoracionSerializer(data=data)
+        serializer = VisualizacionSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -30,10 +30,10 @@ class ValoracionView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        valoraciones = getValoraciones(payload['idBd'])
-        return Response(valoraciones)
+        visualizaciones = getVisualizaciones(payload['idBd'])
+        return Response(visualizaciones)
     
-    def delete(self, request, valoracion_id):
+    def delete(self, request, visualizacion_id):
         token = request.COOKIES.get('jwt')
         if not token:
             raise AuthenticationFailed('No autenticado')
@@ -41,14 +41,14 @@ class ValoracionView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        valoracion = Valoracion.objects.filter(idBd=valoracion_id).first()
-        if valoracion != None and valoracion.usuario.idBd == payload['idBd']:
-            valoracion.delete()
-            return Response({'message': 'Valoracion eliminada correctamente'})
+        visualizacion = Visualizacion.objects.filter(idBd=visualizacion_id).first()
+        if visualizacion != None and visualizacion.usuario.idBd == payload['idBd']:
+            visualizacion.delete()
+            return Response({'message': 'Visualizacion eliminada correctamente'})
         else:
-            return Response({'message': 'No se pudo elimar la valoracion'}, status=400)
+            return Response({'message': 'No se pudo elimar la visualizacion'}, status=400)
 
-class ValoracionPartidoView(APIView):
+class VisualizacionPartidoView(APIView):
     def get(self, request, partido_id):
         token = request.COOKIES.get('jwt')
         if not token:
@@ -57,6 +57,6 @@ class ValoracionPartidoView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        valoraciones = Valoracion.objects.filter(partido=partido_id).all()
-        serializer = ValoracionSerializer(valoraciones, many=True)
+        visualizaciones = Visualizacion.objects.filter(partido=partido_id).all()
+        serializer = VisualizacionSerializer(visualizaciones, many=True)
         return Response(serializer.data)

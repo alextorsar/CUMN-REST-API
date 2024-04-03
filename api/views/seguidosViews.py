@@ -1,12 +1,11 @@
 from rest_framework.views import APIView
-from .serializers import VisualizacionSerializer
-from .models import Visualizacion
-from .socialController import getVisualizaciones
+from ..serializers import SeguidoSerializer
+from ..models import Seguido
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 import jwt
 
-class VisualizacionView(APIView):
+class SeguidosView(APIView):
     def post(self, request):
         token = request.COOKIES.get('jwt')
         if not token:
@@ -16,12 +15,11 @@ class VisualizacionView(APIView):
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
         data = request.data.copy()
-        data['usuario'] = payload['idBd']
-        serializer = VisualizacionSerializer(data=data)
+        data['seguidor'] = payload['idBd']
+        serializer = SeguidoSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-    
     def get(self, request):
         token = request.COOKIES.get('jwt')
         if not token:
@@ -30,10 +28,10 @@ class VisualizacionView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        visualizaciones = getVisualizaciones(payload['idBd'])
-        return Response(visualizaciones)
-    
-    def delete(self, request, visualizacion_id):
+        seguidos = Seguido.objects.filter(seguidor=payload['idBd'])
+        serializer = SeguidoSerializer(seguidos, many=True)
+        return Response(serializer.data)
+    def delete(self, request, seguido_id):
         token = request.COOKIES.get('jwt')
         if not token:
             raise AuthenticationFailed('No autenticado')
@@ -41,15 +39,14 @@ class VisualizacionView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        visualizacion = Visualizacion.objects.filter(idBd=visualizacion_id).first()
-        if visualizacion != None and visualizacion.usuario.idBd == payload['idBd']:
-            visualizacion.delete()
-            return Response({'message': 'Visualizacion eliminada correctamente'})
+        seguido = Seguido.objects.filter(idBd=seguido_id, seguidor=payload['idBd']).first()
+        if seguido != None and seguido.seguidor.idBd == payload['idBd']:
+            seguido.delete()
+            return Response({'mensaje': 'Se ha dejado de seguir correctamente'}, status=204)
         else:
-            return Response({'message': 'No se pudo elimar la visualizacion'}, status=400)
-
-class VisualizacionPartidoView(APIView):
-    def get(self, request, partido_id):
+            return Response({'mensaje': 'No se ha podido dejar de seguir'}, status=401)
+class SeguidoresView(APIView):
+    def get(self, request):
         token = request.COOKIES.get('jwt')
         if not token:
             raise AuthenticationFailed('No autenticado')
@@ -57,6 +54,6 @@ class VisualizacionPartidoView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        visualizaciones = Visualizacion.objects.filter(partido=partido_id).all()
-        serializer = VisualizacionSerializer(visualizaciones, many=True)
+        seguidores = Seguido.objects.filter(seguido=payload['idBd'])
+        serializer = SeguidoSerializer(seguidores, many=True)
         return Response(serializer.data)

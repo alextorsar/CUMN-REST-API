@@ -1,34 +1,31 @@
 from rest_framework.views import APIView
-from .serializers import EquipoSerializer, UserSerializer
-from .models import Equipo, User
+from ..serializers import UserSerializer
+from ..models import User
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
+from ..controllers.equipoController import getAllEquipo, getEquipoById, getEquiposPartido, getEquipoByName
 import jwt
 
-class EquipoView(APIView):
-
-    #Este método es para crear un nuevo equipo, está comentado porque NO es necesario crear más equipos
-    """def post(self, request):
-        serializer = EquipoSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)"""
-    
+class EquipoView(APIView):   
     def get(self, request):
-        equipos = Equipo.objects.all()
-        serializer = EquipoSerializer(equipos, many=True)
-        return Response(serializer.data)
+        equipos = getAllEquipo()
+        return Response(equipos)
+    
 class EquipoIdView(APIView):
     def get(self, request, id):
-        equipo = Equipo.objects.get(idBd=id)
-        serializer = EquipoSerializer(equipo)
-        return Response(serializer.data)
+        equipo = getEquipoById(id)
+        if equipo is not None:
+            return Response(equipo)
+        else:
+            return Response({'mensaje': 'Equipo no encontrado'}, status=404)
 
 class EquipoNombreView(APIView):
     def get(self, request, nombre):
-        equipo = Equipo.objects.get(nombre=nombre)
-        serializer = EquipoSerializer(equipo)
-        return Response(serializer.data)
+        equipo = getEquipoByName(nombre)
+        if equipo is not None:
+            return Response(equipo)
+        else:
+            return Response({'mensaje': 'Equipo no encontrado'}, status=404)
 
 class PostEquipoFavoritoView(APIView):
     def post(self, request, favorito):
@@ -43,6 +40,8 @@ class PostEquipoFavoritoView(APIView):
         user = User.objects.filter(idBd=payload['idBd']).first()
         serializer = UserSerializer(user)
         return Response(serializer.data)
+    
+    
 class DeleteEquipoFavoritoView(APIView):
     def delete(self, request):
         token = request.COOKIES.get('jwt')

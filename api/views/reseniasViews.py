@@ -1,11 +1,12 @@
 from rest_framework.views import APIView
-from .serializers import SeguidoSerializer
-from .models import Seguido
+from ..serializers import ResenaSerializer
+from ..models import Resena
+from ..controllers.socialController import getResenas
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 import jwt
 
-class SeguidosView(APIView):
+class ResenaView(APIView):
     def post(self, request):
         token = request.COOKIES.get('jwt')
         if not token:
@@ -15,11 +16,12 @@ class SeguidosView(APIView):
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
         data = request.data.copy()
-        data['seguidor'] = payload['idBd']
-        serializer = SeguidoSerializer(data=data)
+        data['usuario'] = payload['idBd']
+        serializer = ResenaSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+    
     def get(self, request):
         token = request.COOKIES.get('jwt')
         if not token:
@@ -28,10 +30,10 @@ class SeguidosView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        seguidos = Seguido.objects.filter(seguidor=payload['idBd'])
-        serializer = SeguidoSerializer(seguidos, many=True)
-        return Response(serializer.data)
-    def delete(self, request, seguido_id):
+        resenas = getResenas(payload['idBd'])
+        return Response(resenas)
+    
+    def delete(self, request, resena_id):
         token = request.COOKIES.get('jwt')
         if not token:
             raise AuthenticationFailed('No autenticado')
@@ -39,14 +41,15 @@ class SeguidosView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        seguido = Seguido.objects.filter(idBd=seguido_id, seguidor=payload['idBd']).first()
-        if seguido != None and seguido.seguidor.idBd == payload['idBd']:
-            seguido.delete()
-            return Response({'mensaje': 'Se ha dejado de seguir correctamente'}, status=204)
+        resenia = Resena.objects.filter(idBd=resena_id).first()
+        if resenia != None and resenia.usuario.idBd == payload['idBd']:
+            resenia.delete()
+            return Response({'message': 'Reseña eliminada correctamente'})
         else:
-            return Response({'mensaje': 'No se ha podido dejar de seguir'}, status=401)
-class SeguidoresView(APIView):
-    def get(self, request):
+            return Response({'message': 'No se pudo elimar la reseña'}, status=400) 
+
+class ResenaPartidoView(APIView):
+    def get(self, request, partido_id):
         token = request.COOKIES.get('jwt')
         if not token:
             raise AuthenticationFailed('No autenticado')
@@ -54,6 +57,6 @@ class SeguidoresView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        seguidores = Seguido.objects.filter(seguido=payload['idBd'])
-        serializer = SeguidoSerializer(seguidores, many=True)
+        resenias = Resena.objects.filter(partido=partido_id).all()
+        serializer = ResenaSerializer(resenias, many=True)
         return Response(serializer.data)

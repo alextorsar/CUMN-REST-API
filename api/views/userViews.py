@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import UserSerializer
+from ..serializers import UserSerializer
 from rest_framework.response import Response
-from .models import User
+from ..models import User
 import jwt, datetime
 
 

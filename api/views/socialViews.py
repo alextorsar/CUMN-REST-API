@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-from .socialController import getSeguidos, getUltimasAccionesSociales
+from ..controllers.socialController import getSeguidos, getUltimasAccionesSociales
 import jwt
 
 def getHoraDeAccion(accion):

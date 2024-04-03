@@ -1,12 +1,13 @@
 from django.urls import path
-from .userViews import RegisterView, LoginView, UserView, LogoutView
-from .equiposViews import EquipoView, EquipoIdView, EquipoNombreView, PostEquipoFavoritoView, DeleteEquipoFavoritoView
-from .partidosViews import PartidoView, PartidoIdView, PartidosEquipoView, PartidosJornadaView
-from .valoracionesViews import ValoracionView, ValoracionPartidoView
-from .visualizacionesViews import VisualizacionView, VisualizacionPartidoView
-from .reseniasViews import ResenaView, ResenaPartidoView
-from .seguidosViews import SeguidosView, SeguidoresView
-from .socialViews import UltimasAccionesSociales
+from .views.userViews import RegisterView, LoginView, UserView, LogoutView
+from .views.equiposViews import EquipoView, EquipoIdView, EquipoNombreView, PostEquipoFavoritoView, DeleteEquipoFavoritoView
+from .views.partidosViews import PartidoView, PartidoIdView, PartidosEquipoView, PartidosJornadaView
+from .views.valoracionesViews import ValoracionView, ValoracionPartidoView
+from .views.visualizacionesViews import VisualizacionView, VisualizacionPartidoView
+from .views.reseniasViews import ResenaView, ResenaPartidoView
+from .views.seguidosViews import SeguidosView, SeguidoresView
+from .views.socialViews import UltimasAccionesSociales
+from .views.estadisticasViews import EstadisticasView
 
 urlpatterns = [
     path('register/', RegisterView.as_view()),
@@ -34,5 +35,6 @@ urlpatterns = [
     path('seguido/', SeguidosView.as_view()),
     path('seguido/<int:seguido_id>/', SeguidosView.as_view()),
     path('seguidor/', SeguidoresView.as_view()),
-    path('social/', UltimasAccionesSociales.as_view())
+    path('social/', UltimasAccionesSociales.as_view()),
+    path('estadisticas/', EstadisticasView.as_view()),
 ]

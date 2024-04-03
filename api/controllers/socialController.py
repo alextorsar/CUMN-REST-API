@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
-from .serializers import VisualizacionSerializer, ValoracionSerializer, ResenaSerializer, SeguidoSerializer
-from .models import Visualizacion, Valoracion, Resena, Seguido
+from ..serializers import VisualizacionSerializer, ValoracionSerializer, ResenaSerializer, SeguidoSerializer
+from ..models import Visualizacion, Valoracion, Resena, Seguido
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 import jwt
