@@ -20,3 +20,25 @@ def getPartidosJornada(jornada):
     partidos = Partido.objects.filter(jornada=jornada)
     serializer = PartidoSerializer(partidos, many=True)
     return serializer.data
+
+def getPartidosStatus(status):
+    partidos = Partido.objects.filter(status=status)
+    serializer = PartidoSerializer(partidos, many=True)
+    return serializer.data
+
+def setPartidoStatusTo2(id, hora):
+    partido = Partido.objects.filter(idBd=id).first()
+    partido.status = 2
+    partido.hora = hora
+    partido.save()
+    serializer = PartidoSerializer(partido)
+    return serializer.data
+
+def setPartidoStatusTo1(id, golesLocal, golesVisitante):
+    partido = Partido.objects.filter(idBd=id).first()
+    partido.status = 1
+    partido.golesLocal = golesLocal
+    partido.golesVisitante = golesVisitante
+    partido.save()
+    serializer = PartidoSerializer(partido)
+    return serializer.data

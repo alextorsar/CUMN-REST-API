@@ -1,7 +1,7 @@
 from django.urls import path
 from .views.userViews import RegisterView, LoginView, UserView, LogoutView
 from .views.equiposViews import EquipoView, EquipoIdView, EquipoNombreView, PostEquipoFavoritoView, DeleteEquipoFavoritoView
-from .views.partidosViews import PartidoView, PartidoIdView, PartidosEquipoView, PartidosJornadaView
+from .views.partidosViews import PartidoView, PartidoIdView, PartidosEquipoView, PartidosJornadaView, PartidosStatusView
 from .views.valoracionesViews import ValoracionView, ValoracionPartidoView
 from .views.visualizacionesViews import VisualizacionView, VisualizacionPartidoView
 from .views.reseniasViews import ResenaView, ResenaPartidoView
@@ -23,6 +23,8 @@ urlpatterns = [
     path('partido/<int:id>/', PartidoIdView.as_view()),
     path('partido/equipo/<int:id>/', PartidosEquipoView.as_view()),
     path('partido/jornada/<int:jornada>/', PartidosJornadaView.as_view()),
+    path('partido/status/<int:status>/', PartidosStatusView.as_view()),
+    path('partido/status/', PartidosStatusView.as_view()),
     path('valoracion/', ValoracionView.as_view()),
     path('valoracion/partido/<int:partido_id>/', ValoracionPartidoView.as_view()),
     path('valoracion/<int:valoracion_id>/', ValoracionView.as_view()),
