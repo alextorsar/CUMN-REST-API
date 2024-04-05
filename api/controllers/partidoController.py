@@ -29,7 +29,7 @@ def getPartidosStatus(status):
 def setPartidoStatusTo2(id, hora):
     partido = Partido.objects.filter(idBd=id).first()
     partido.status = 2
-    partido.hora = hora
+    partido.fecha = hora
     partido.save()
     serializer = PartidoSerializer(partido)
     return serializer.data
