@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-_52nqk^63c+@t0hc)3sa#g5!5rhtrs#mprzutnwpio#=7c)7e)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['59e8-212-128-135-130.ngrok-free.app', 'localhost']
+ALLOWED_HOSTS = ['d0a0-85-54-210-196.ngrok-free.app', 'localhost']
 
 TIME_ZONE =	'Europe/Madrid'
 
@@ -163,8 +163,9 @@ STORAGES = {
     "staticfiles":{
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": {
-            "AZURE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=cumnstorage;AccountKey=xWrVOls7G9kp4MXGt2PyndLPwmxMfO1hoBuHgayPaWfKHlGgpIZM9YGyezxMHtCRfH/YdosErhkZ+AStLlpXZg==;EndpointSuffix=core.windows.net",
-            "AZURE_CONTAINER": "static",
+            "account_key":"xWrVOls7G9kp4MXGt2PyndLPwmxMfO1hoBuHgayPaWfKHlGgpIZM9YGyezxMHtCRfH/YdosErhkZ+AStLlpXZg==",
+            "account_name": "cumnstorage",
+            "azure_container": "static",
         },
     }
 }
