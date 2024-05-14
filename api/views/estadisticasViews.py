@@ -15,7 +15,7 @@ def getSegundosVisualizados(userId):
 def getEquipoMasVisto(userId):
     visualizaciones = getVisualizaciones(userId)
     equipos = {}
-    equipoMasVisto = None
+    equipoMasVisto = -1
     maximasVisualizacinones = 0
     for visualizacion in visualizaciones:
         equipoLocal, equipoVisitante = getEquiposPartido(visualizacion['partido'])
@@ -26,14 +26,14 @@ def getEquipoMasVisto(userId):
         else:
             equipos[equipoLocalId] = 1
         if equipos[equipoLocalId] > maximasVisualizacinones:
-            equipoMasVisto = equipoLocal
+            equipoMasVisto = equipoLocal['idBd']
             maximasVisualizacinones = equipos[equipoLocalId]
         if equipoVisitanteId in equipos:
             equipos[equipoVisitanteId] += 1
         else:
             equipos[equipoVisitanteId] = 1
         if equipos[equipoVisitanteId] > maximasVisualizacinones:    
-            equipoMasVisto = equipoVisitante
+            equipoMasVisto = equipoVisitante['idBd']
             maximasVisualizacinones = equipos[equipoVisitanteId]
     return equipoMasVisto, maximasVisualizacinones
 
@@ -49,7 +49,7 @@ class EstadisticasView(APIView):
         equipoMasVisto, vecesVisto = getEquipoMasVisto(payload['idBd'])
         response = Response({
             'numeroPartidos': getPartidosVisualizados(payload['idBd']),
-            'numeroMinutos': getSegundosVisualizados(payload['idBd']),
+            'numeroSegundos': getSegundosVisualizados(payload['idBd']),
             'equipoMasVisto': equipoMasVisto,
             'vecesVisto': vecesVisto,
         })

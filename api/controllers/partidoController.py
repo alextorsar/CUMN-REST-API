@@ -20,6 +20,10 @@ def getPartidosJornada(jornada):
     partidos = Partido.objects.filter(jornada=jornada)
     serializer = PartidoSerializer(partidos, many=True)
     return serializer.data
+def getPartidosJornadaActual():
+    partidos = Partido.objects.filter(status=2).order_by('fecha')
+    jornadaActual = partidos.first().jornada
+    return getPartidosJornada(jornadaActual)
 
 def getPartidosStatus(status):
     partidos = Partido.objects.filter(status=status)

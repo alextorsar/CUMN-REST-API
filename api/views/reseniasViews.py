@@ -33,7 +33,7 @@ class ResenaView(APIView):
         resenas = getResenas(payload['idBd'])
         return Response(resenas)
     
-    def delete(self, request, resena_id):
+    def delete(self, request, partido_id):
         token = request.COOKIES.get('jwt')
         if not token:
             raise AuthenticationFailed('No autenticado')
@@ -41,7 +41,7 @@ class ResenaView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        resenia = Resena.objects.filter(idBd=resena_id).first()
+        resenia = Resena.objects.filter(partido=partido_id, usuario=payload['idBd']).first()
         if resenia != None and resenia.usuario.idBd == payload['idBd']:
             resenia.delete()
             return Response({'message': 'Reseña eliminada correctamente'})

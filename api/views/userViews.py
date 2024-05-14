@@ -16,6 +16,7 @@ class RegisterView(APIView):
 
 class LoginView(APIView):
     def post(self, request):
+        print(request.data)
         data = request.data
         correo = data.get('correo')
         contrasenia = data.get('contrasenia')
@@ -51,4 +52,26 @@ class UserView(APIView):
             raise AuthenticationFailed('Sesion expirada')
         user = User.objects.filter(idBd=payload['idBd']).first()
         serializer = UserSerializer(user)
+        return Response(serializer.data)
+    
+    def put(self,request):
+        token = request.COOKIES.get('jwt')
+        if not token:
+            raise AuthenticationFailed('No autenticado')
+        try:
+            payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Sesion expirada')
+        user = User.objects.filter(idBd=payload['idBd']).first()
+        if request.data.get('equipoFavorito') is not None and int(request.data.get('equipoFavorito')) == -1:
+            request.data['equipoFavorito'] = None
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    
+class AllUsersView(APIView):
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
         return Response(serializer.data)

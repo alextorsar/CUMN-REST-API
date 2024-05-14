@@ -39,10 +39,10 @@ class SeguidosView(APIView):
             payload = jwt.decode(token, 'ahhshfgfrsvsfsvb5657890gst45362gdf', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Sesion expirada')
-        seguido = Seguido.objects.filter(idBd=seguido_id, seguidor=payload['idBd']).first()
+        seguido = Seguido.objects.filter(seguido=seguido_id, seguidor=payload['idBd']).first()
         if seguido != None and seguido.seguidor.idBd == payload['idBd']:
             seguido.delete()
-            return Response({'mensaje': 'Se ha dejado de seguir correctamente'}, status=204)
+            return Response({'mensaje': 'Se ha dejado de seguir correctamente'}, status=200)
         else:
             return Response({'mensaje': 'No se ha podido dejar de seguir'}, status=401)
 class SeguidoresView(APIView):

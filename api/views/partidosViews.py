@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from ..serializers import PartidoSerializer
 from ..models import Partido
 from rest_framework.response import Response
-from ..controllers.partidoController import getAllPartido, getPartidoById, getPartidosEquipo, getPartidosJornada, getPartidosStatus, setPartidoStatusTo2, setPartidoStatusTo1
+from ..controllers.partidoController import getPartidosJornadaActual, getAllPartido, getPartidoById, getPartidosEquipo, getPartidosJornada, getPartidosStatus, setPartidoStatusTo2, setPartidoStatusTo1
 
 class PartidoView(APIView):
     def get(self, request):
@@ -25,6 +25,11 @@ class PartidosEquipoView(APIView):
 class PartidosJornadaView(APIView):
     def get(self, request, jornada):
         partidos = getPartidosJornada(jornada)
+        return Response(partidos)
+
+class PartidosJornadaActualView(APIView):
+    def get(self, request):
+        partidos = getPartidosJornadaActual()
         return Response(partidos)
     
 class PartidosStatusView(APIView):
